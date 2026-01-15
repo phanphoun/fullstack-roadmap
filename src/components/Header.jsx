@@ -70,6 +70,12 @@ const Header = ({ roadmapData, darkMode, toggleDarkMode }) => {
             >
               Resources
             </button>
+            <button
+              onClick={() => scrollToSection('about')}
+              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
+              About Me
+            </button>
             <a
               href="https://github.com"
               target="_blank"
@@ -138,6 +144,12 @@ const Header = ({ roadmapData, darkMode, toggleDarkMode }) => {
                 className="text-left text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2"
               >
                 Resources
+              </button>
+              <button
+                onClick={() => scrollToSection('about')}
+                className="text-left text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2"
+              >
+                About Me
               </button>
               <a
                 href="https://github.com"

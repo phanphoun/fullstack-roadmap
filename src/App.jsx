@@ -4,6 +4,7 @@ import ProgressTracker from './components/ProgressTracker';
 import SearchFilter from './components/SearchFilter';
 import RoadmapSection from './components/RoadmapSection';
 import Timeline from './components/Timeline';
+import AboutMe from './components/AboutMe';
 import Footer from './components/Footer';
 import roadmapData from './data/roadmapData';
 
@@ -44,10 +45,10 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <Header 
-        roadmapData={roadmapData} 
-        darkMode={darkMode} 
-        toggleDarkMode={toggleDarkMode} 
+      <Header
+        roadmapData={roadmapData}
+        darkMode={darkMode}
+        toggleDarkMode={toggleDarkMode}
       />
 
       {/* Hero Section */}
@@ -73,7 +74,7 @@ function App() {
               View Resources
             </button>
           </div>
-          
+
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -102,21 +103,19 @@ function App() {
           <div className="bg-white dark:bg-gray-800 rounded-lg p-1 shadow-lg">
             <button
               onClick={() => setActiveTab('roadmap')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                activeTab === 'roadmap'
-                  ? 'bg-primary-500 text-white'
-                  : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
-              }`}
+              className={`px-6 py-2 rounded-lg font-medium transition-colors ${activeTab === 'roadmap'
+                ? 'bg-primary-500 text-white'
+                : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+                }`}
             >
               Detailed Roadmap
             </button>
             <button
               onClick={() => setActiveTab('timeline')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                activeTab === 'timeline'
-                  ? 'bg-primary-500 text-white'
-                  : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
-              }`}
+              className={`px-6 py-2 rounded-lg font-medium transition-colors ${activeTab === 'timeline'
+                ? 'bg-primary-500 text-white'
+                : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+                }`}
             >
               Timeline View
             </button>
@@ -128,14 +127,14 @@ function App() {
           <div id="roadmap">
             {/* Search and Filter */}
             <SearchFilter roadmapData={roadmapData} />
-            
+
             {/* Roadmap Sections */}
             <div className="space-y-8">
               {roadmapData.phases.map((phase) => (
-                <RoadmapSection 
-                  key={phase.id} 
-                  phase={phase} 
-                  roadmapData={roadmapData} 
+                <RoadmapSection
+                  key={phase.id}
+                  phase={phase}
+                  roadmapData={roadmapData}
                 />
               ))}
             </div>
@@ -194,11 +193,10 @@ function App() {
                         <span className="font-medium text-gray-900 dark:text-white">
                           {resource.name}
                         </span>
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          resource.type === 'free' 
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                        }`}>
+                        <span className={`text-xs px-2 py-1 rounded-full ${resource.type === 'free'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                          : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                          }`}>
                           {resource.type}
                         </span>
                       </div>
@@ -210,6 +208,9 @@ function App() {
           </div>
         </section>
       </main>
+
+      {/* About Me Section */}
+      <AboutMe />
 
       <Footer />
     </div>
