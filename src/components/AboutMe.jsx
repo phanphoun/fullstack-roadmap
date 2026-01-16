@@ -56,14 +56,36 @@ const AboutMe = () => {
                             <div className="text-center">
                                 {/* Profile Image */}
                                 <div className="relative inline-block mb-6">
-                                    <div className="w-32 h-32 bg-gradient-to-r from-primary-500 to-success-500 rounded-full p-1">
-                                        <div className="w-full h-full bg-white dark:bg-gray-800 rounded-full flex items-center justify-center">
-                                            <div className="w-28 h-28 bg-gradient-to-r from-primary-400 to-success-400 rounded-full flex items-center justify-center">
-                                                <span className="text-white text-3xl font-bold">PM</span>
-                                            </div>
+                                    {/* Animated outer ring */}
+                                    <div className="absolute inset-0 w-32 h-32 bg-gradient-to-r from-primary-500 via-blue-500 to-purple-500 rounded-full p-1 animate-pulse">
+                                        <div className="w-full h-full bg-white dark:bg-gray-800 rounded-full"></div>
+                                    </div>
+
+                                    {/* Main image container */}
+                                    <div className="relative w-32 h-32 bg-gradient-to-r from-primary-400 to-success-400 rounded-full p-0.5 shadow-2xl">
+                                        <div className="w-full h-full bg-white dark:bg-gray-800 rounded-full overflow-hidden group">
+                                            <img
+                                                src="/hero.jpg"
+                                                alt="Phoun Phan"
+                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                            />
+
+                                            {/* Overlay gradient */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         </div>
                                     </div>
-                                    <div className="absolute bottom-0 right-0 w-8 h-8 bg-green-500 rounded-full border-4 border-white dark:border-gray-800"></div>
+
+                                    {/* Enhanced online status indicator */}
+                                    <div className="absolute bottom-1 right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 shadow-lg flex items-center justify-center">
+                                        <div className="w-2 h-2 bg-white rounded-full animate-ping"></div>
+                                        <div className="absolute w-2 h-2 bg-white rounded-full"></div>
+                                    </div>
+
+                                    {/* Decorative corner accents */}
+                                    <div className="absolute -top-1 -left-1 w-4 h-4 bg-primary-500 rounded-full opacity-60 animate-pulse"></div>
+                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full opacity-60 animate-pulse delay-75"></div>
+                                    <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-purple-500 rounded-full opacity-60 animate-pulse delay-150"></div>
+                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success-500 rounded-full opacity-60 animate-pulse delay-300"></div>
                                 </div>
 
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">

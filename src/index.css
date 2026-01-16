@@ -6,7 +6,7 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
@@ -16,36 +16,36 @@
   .roadmap-section {
     @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300;
   }
-  
+
   .roadmap-item {
     @apply flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200;
   }
-  
+
   .roadmap-item.completed {
     @apply bg-success-50 dark:bg-success-900/20 border border-success-200 dark:border-success-800;
   }
-  
+
   .roadmap-item.in-progress {
     @apply bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800;
   }
-  
+
   .progress-bar {
     @apply h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden;
   }
-  
+
   .progress-fill {
     @apply h-full bg-gradient-to-r from-primary-500 to-success-500 transition-all duration-500 ease-out;
   }
-  
+
   .timeline-item {
     @apply relative pl-8 pb-8 border-l-2 border-gray-200 dark:border-gray-600 last:border-l-0 last:pb-0;
   }
-  
+
   .timeline-item::before {
     @apply absolute -left-2 top-0 w-4 h-4 bg-primary-500 rounded-full border-4 border-white dark:border-gray-900;
     content: '';
   }
-  
+
   .timeline-item.completed::before {
     @apply bg-success-500;
   }
@@ -55,9 +55,21 @@
   .text-gradient {
     @apply bg-gradient-to-r from-primary-600 to-success-600 bg-clip-text text-transparent;
   }
-  
+
   .glass {
     @apply bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm;
+  }
+
+  .delay-75 {
+    animation-delay: 75ms;
+  }
+
+  .delay-150 {
+    animation-delay: 150ms;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
   }
 }
 
@@ -84,6 +96,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
