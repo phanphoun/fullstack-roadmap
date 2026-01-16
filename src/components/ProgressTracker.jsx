@@ -1,9 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle, Circle, Clock, TrendingUp } from 'lucide-react';
 import { calculateOverallProgress } from '../utils/progressUtils';
+import { useAuth } from '../context/AuthContext';
+import apiService from '../services/api.js';
 
 const ProgressTracker = ({ roadmapData }) => {
-  const progress = calculateOverallProgress(roadmapData);
+  const [backendProgress, setBackendProgress] = useState(null);
+  const { isAuthenticated } = useAuth();
+
+  // Fetch backend progress when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchBackendProgress();
+    } else {
+      setBackendProgress(null);
+    }
+  }, [isAuthenticated]);
+
+  const fetchBackendProgress = async () => {
+    try {
+      const response = await apiService.getProgressOverview();
+      if (response.success) {
+        setBackendProgress(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching backend progress:', error);
+      setBackendProgress(null);
+    }
+  };
+
+  // Use backend data if available, otherwise fall back to localStorage
+  const progress = backendProgress || calculateOverallProgress(roadmapData);
 
   const getStatusColor = (percentage) => {
     if (percentage >= 80) return 'text-success-600 dark:text-success-400';
@@ -39,7 +66,7 @@ const ProgressTracker = ({ roadmapData }) => {
       {/* Progress Bar */}
       <div className="mb-6">
         <div className="progress-bar">
-          <div 
+          <div
             className={`progress-fill bg-gradient-to-r ${getProgressColor(progress.completionPercentage)}`}
             style={{ width: `${progress.completionPercentage}%` }}
           ></div>

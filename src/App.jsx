@@ -7,10 +7,15 @@ import Timeline from './components/Timeline';
 import AboutMe from './components/AboutMe';
 import Footer from './components/Footer';
 import roadmapData from './data/roadmapData';
+import { useAuth } from './context/AuthContext';
+import apiService from './services/api.js';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState('roadmap');
+  const [userStats, setUserStats] = useState(null);
+  const [progressData, setProgressData] = useState(null);
+  const { user, isAuthenticated } = useAuth();
 
   // Initialize dark mode from localStorage or system preference
   useEffect(() => {
@@ -31,6 +36,45 @@ function App() {
     }
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
   }, [darkMode]);
+
+  // Fetch user data when authenticated
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      fetchUserData();
+    } else {
+      setUserStats(null);
+      setProgressData(null);
+    }
+  }, [isAuthenticated, user]);
+
+  const fetchUserData = async () => {
+    try {
+      // Get user progress overview
+      const progressResponse = await apiService.getProgressOverview();
+      if (progressResponse.success) {
+        setProgressData(progressResponse.data);
+      }
+
+      // Get user statistics (we'll use the progress data for now)
+      setUserStats({
+        totalSessions: progressResponse.data?.totalItems || 0,
+        totalTimeSpent: progressResponse.data?.totalTimeSpent || 0,
+        itemsCompleted: progressResponse.data?.completedItems || 0,
+        streakDays: progressResponse.data?.streak?.currentStreak || 0,
+        longestStreak: progressResponse.data?.streak?.longestStreak || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      // Set default values if API fails
+      setUserStats({
+        totalSessions: 0,
+        totalTimeSpent: 0,
+        itemsCompleted: 0,
+        streakDays: 0,
+        longestStreak: 0,
+      });
+    }
+  };
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -55,17 +99,23 @@ function App() {
       <section id="overview" className="bg-gradient-to-br from-primary-500 via-primary-600 to-success-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in-up">
-            {roadmapData.title}
+            {isAuthenticated && user ?
+              `Welcome back, ${user.displayName || user.username}!` :
+              roadmapData.title
+            }
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-primary-100 animate-fade-in-up">
-            {roadmapData.description}
+            {isAuthenticated && progressData ?
+              `You've completed ${progressData.completionPercentage}% of your learning journey` :
+              roadmapData.description
+            }
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up">
             <button
               onClick={() => scrollToSection('roadmap')}
               className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg"
             >
-              Start Learning
+              {isAuthenticated ? 'Continue Learning' : 'Start Learning'}
             </button>
             <button
               onClick={() => scrollToSection('resources')}
@@ -75,21 +125,48 @@ function App() {
             </button>
           </div>
 
-          {/* Stats */}
+          {/* Dynamic Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="text-3xl font-bold mb-2">12</div>
-              <div className="text-primary-100">Months of Learning</div>
+              <div className="text-3xl font-bold mb-2">
+                {isAuthenticated && userStats ? userStats.itemsCompleted : '50+'}
+              </div>
+              <div className="text-primary-100">
+                {isAuthenticated ? 'Items Completed' : 'Skills & Projects'}
+              </div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="text-3xl font-bold mb-2">4</div>
-              <div className="text-primary-100">Major Phases</div>
+              <div className="text-3xl font-bold mb-2">
+                {isAuthenticated && progressData ? progressData.completionPercentage + '%' : '4'}
+              </div>
+              <div className="text-primary-100">
+                {isAuthenticated ? 'Progress' : 'Major Phases'}
+              </div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <div className="text-3xl font-bold mb-2">50+</div>
-              <div className="text-primary-100">Skills & Projects</div>
+              <div className="text-3xl font-bold mb-2">
+                {isAuthenticated && userStats ? userStats.streakDays : '12'}
+              </div>
+              <div className="text-primary-100">
+                {isAuthenticated ? 'Day Streak' : 'Months of Learning'}
+              </div>
             </div>
           </div>
+
+          {/* User Welcome Message */}
+          {isAuthenticated && user && (
+            <div className="mt-8 bg-white/10 backdrop-blur-sm rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-2">
+                👋 Welcome to Your Learning Dashboard
+              </h3>
+              <p className="text-primary-100">
+                {userStats?.itemsCompleted > 0 ?
+                  `Great progress! You've completed ${userStats.itemsCompleted} items${userStats.streakDays > 0 ? ` and maintained a ${userStats.streakDays}-day streak!` : '.'}` :
+                  "Ready to start your full-stack journey? Let's begin with the first phase!"
+                }
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -183,7 +260,6 @@ function App() {
                 <div className="space-y-3">
                   {resources.map((resource, index) => (
                     <a
-                      key={index}
                       href={resource.url}
                       target="_blank"
                       rel="noopener noreferrer"
